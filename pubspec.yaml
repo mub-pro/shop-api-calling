@@ -61,6 +61,34 @@ flutter:
   assets:
     - assets/images/
 
+  fonts:
+    - family: fredoka regular
+      fonts:
+       - asset: assets/fonts/Fredoka/Fredoka-Regular.ttf
+
+    - family: fredoka medium
+      fonts:
+       - asset: assets/fonts/Fredoka/Fredoka-Medium.ttf
+
+    - family: fredoka bold
+      fonts:
+       - asset: assets/fonts/Fredoka/Fredoka-Bold.ttf
+
+    - family: roboto regular
+      fonts:
+       - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+
+    - family: roboto medium
+      fonts:
+       - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+
+    - family: roboto bold
+      fonts:
+       - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+
+
+
+
   # fonts:
   #   - family: Schyler
   #     fonts:

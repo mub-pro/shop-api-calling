@@ -19,13 +19,17 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           title: const Text(
             'My Cart',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontFamily: 'fredoka medium',
+            ),
           ),
           centerTitle: true),
       body: FutureBuilder(
@@ -42,168 +46,163 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.products!.length,
-                        itemBuilder: (context, index) {
-                          Cart cart = snapshot.data!;
-                          return FutureBuilder(
-                              future: _productsApi.getProductById(
-                                  cart.products![index]['productId']),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<Product?> snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.none:
-                                    return const Center(
-                                        child: Text('Nothing Happen'));
-                                  case ConnectionState.waiting:
-                                  case ConnectionState.active:
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  case ConnectionState.done:
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              .12,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 16),
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey.shade200,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Stack(
-                                        children: [
-                                          Row(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.products!.length,
+                      itemBuilder: (context, index) {
+                        Cart cart = snapshot.data!;
+                        return FutureBuilder(
+                            future: _productsApi.getProductById(
+                                cart.products![index]['productId']),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Product?> snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.none:
+                                  return const Center(
+                                      child: Text('Nothing Happen'));
+                                case ConnectionState.waiting:
+                                case ConnectionState.active:
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                case ConnectionState.done:
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height *
+                                        .15,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 16),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Stack(
+                                      children: [
+                                        // image
+                                        Positioned(
+                                          left: 0,
+                                          top: 0,
+                                          bottom: 0,
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 14.0),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .23,
+                                            alignment: Alignment.centerLeft,
+                                            decoration: BoxDecoration(
+                                                // color: Colors.black12,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.contain,
+                                                    image: NetworkImage(snapshot
+                                                        .data!.image!))),
+                                          ),
+                                        ),
+                                        // texts
+                                        Positioned(
+                                          left: 120,
+                                          top: 0,
+                                          bottom: 0,
+                                          child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Row(children: [
-                                                //Image
-                                                Container(
-                                                  margin: const EdgeInsets.only(
-                                                      right: 14.0),
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      .23,
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  decoration: BoxDecoration(
-                                                      // color: Colors.black12,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.cover,
-                                                          image: NetworkImage(
-                                                              snapshot.data!
-                                                                  .image!))),
-                                                ),
-                                                //Text
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  bottom: 12.0),
-                                                          child: Text(snapshot
-                                                              .data!.title!
-                                                              .substring(
-                                                                  0, 10)),
-                                                        ),
-                                                        const Text(
-                                                          'description',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black45),
-                                                        ),
-                                                      ],
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Text(
+                                                    snapshot.data!.title!
+                                                        .substring(0, 10),
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
                                                     ),
-                                                    Text(
-                                                      '\$${snapshot.data!.price!}',
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    snapshot.data!.description!
+                                                        .substring(0, 22),
+                                                    style: const TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 15,
                                                     ),
-                                                  ],
-                                                ),
-                                              ]),
-                                              // Counter
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
                                                   ),
-                                                  // height: 20,
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 6,
-                                                      horizontal: 12),
-                                                  child: Row(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          // print('decrease');
-                                                          // cartProvider.decreaseCounter(
-                                                          //     cartProvider.allCarts[index]);
-                                                        },
-                                                        child: const Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  right: 8.0),
-                                                          child: Icon(
-                                                            Icons.remove,
-                                                            size: 16,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                          '${cart.products![index]['quantity']}'),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          // print('increase');
-                                                          // cartProvider.increaseCounter(
-                                                          //     cartProvider.allCarts[index]);
-                                                        },
-                                                        child: const Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 8.0),
-                                                          child: Icon(
-                                                            Icons.add,
-                                                            size: 16,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                ],
+                                              ),
+                                              Text(
+                                                '\$${snapshot.data!.price!}',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                }
-                              });
-                        },
-                      ),
+                                        ),
+                                        // counter
+                                        Positioned(
+                                            right: 0,
+                                            bottom: 0,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade200,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              margin: EdgeInsets.only(right: 5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6,
+                                                      horizontal: 10),
+                                              child: Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      // print('decrease');
+                                                      // cartProvider.decreaseCounter(
+                                                      //     cartProvider.allCarts[index]);
+                                                    },
+                                                    child: const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 8.0),
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        size: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                      '${cart.products![index]['quantity']}'),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      // print('increase');
+                                                      // cartProvider.increaseCounter(
+                                                      //     cartProvider.allCarts[index]);
+                                                    },
+                                                    child: const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 8.0),
+                                                      child: Icon(
+                                                        Icons.add,
+                                                        size: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                              }
+                            });
+                      },
                     ),
                   ),
                   Expanded(

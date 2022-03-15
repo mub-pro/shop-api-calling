@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'fredoka regular',
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const CartPage(),
     );
   }
 }

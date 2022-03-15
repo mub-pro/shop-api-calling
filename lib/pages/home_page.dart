@@ -1,5 +1,6 @@
 import 'package:api_call/api/category_api.dart';
 import 'package:api_call/api/products_api.dart';
+import 'package:api_call/components/product_card.dart';
 import 'package:api_call/models/product.dart';
 import 'package:api_call/pages/cart_page.dart';
 import 'package:api_call/pages/product_page.dart';
@@ -29,14 +30,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-          child: ElevatedButton(
-        child: const Text('cart page'),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const CartPage()));
-        },
-      )),
+      backgroundColor: Colors.grey.shade100,
+      drawer: Drawer(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -59,12 +54,16 @@ class _HomePageState extends State<HomePage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
+            SizedBox(height: 30),
+            // hello
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
-              child: Text('Hello, name', style: _style),
+              child:
+                  Text('Hello, Mubarak', style: _style.copyWith(fontSize: 25)),
             ),
             const SizedBox(height: 20),
+            // banners
             Container(
               width: MediaQuery.of(context).size.width,
               height: 150,
@@ -133,6 +132,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 40),
+            // category
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -142,6 +142,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
+            // categories list
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
@@ -162,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                           itemCount: snapshot.data!.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
+                            String category = snapshot.data![index];
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -174,15 +176,19 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Container(
                                 margin: _ml(index == snapshot.data!.length - 1),
-                                width: 140,
+                                width: MediaQuery.of(context).size.width / 2.5,
                                 decoration: BoxDecoration(
                                   color: Colors.deepOrangeAccent,
                                   borderRadius: BorderRadius.circular(18),
                                 ),
                                 child: Center(
                                     child: Text(
-                                  snapshot.data![index],
-                                  style: const TextStyle(color: Colors.white),
+                                  category.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
                                 )),
                               ),
                             );
@@ -192,6 +198,7 @@ class _HomePageState extends State<HomePage> {
                   }),
             ),
             const SizedBox(height: 40),
+            // latest
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -201,6 +208,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
+            // products list
             SizedBox(
               height: 6 * 130,
               child: FutureBuilder(
@@ -225,69 +233,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisCount: 2,
                         children: List.generate(5, (index) {
                           Product product = snapshot.data![index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProductPage(product: product)));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      left: 0,
-                                      right: 0,
-                                      top: 30,
-                                      child: Image.network(
-                                        product.image!,
-                                        height: 120,
-                                      )),
-                                  Positioned(
-                                      right: 0,
-                                      child: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.favorite),
-                                      )),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 0,
-                                    left: 0,
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white70,
-                                          borderRadius:
-                                              BorderRadius.circular(6)),
-                                      width: 120,
-                                      height: 60,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(product.title!
-                                                .substring(0, 10)),
-                                            Text('\$${product.price!}'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return ProductCard(product: product);
                         }),
                       );
                   }
@@ -301,7 +247,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   TextStyle get _style =>
-      const TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+      const TextStyle(fontWeight: FontWeight.bold, fontSize: 22);
 
   EdgeInsets _ml(bool last) => EdgeInsets.only(left: 20, right: last ? 20 : 0);
 
