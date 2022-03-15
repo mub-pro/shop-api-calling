@@ -11,6 +11,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  bool _isFavorite = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,8 +41,14 @@ class _ProductCardState extends State<ProductCard> {
             Positioned(
                 right: 0,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.favorite),
+                  onPressed: () {
+                    setState(() {
+                      _isFavorite = !_isFavorite;
+                    });
+                  },
+                  icon: _isFavorite
+                      ? const Icon(Icons.favorite)
+                      : const Icon(Icons.favorite_outline_rounded),
                 )),
             Positioned(
               bottom: 10,
@@ -62,14 +69,14 @@ class _ProductCardState extends State<ProductCard> {
                     children: [
                       Text(
                         widget.product!.title!.substring(0, 10),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         '\$${widget.product!.price!.toDouble()}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontFamily: 'fredoka medium'),
                       ),
                     ],

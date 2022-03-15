@@ -18,11 +18,15 @@ class ProductPage extends StatelessWidget {
         body: SingleChildScrollView(
             child: Column(
           children: <Widget>[
-            Image.network(
-              product!.image!,
+            SizedBox(
               height: MediaQuery.of(context).size.height / 2,
-              width: 250,
+              child: Image.network(
+                product!.image!,
+                width: 250,
+                fit: BoxFit.contain,
+              ),
             ),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(

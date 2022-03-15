@@ -21,17 +21,21 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          title: const Text(
-            'My Cart',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontFamily: 'fredoka medium',
-            ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        title: const Text(
+          'My Cart',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontFamily: 'fredoka medium',
           ),
-          centerTitle: true),
+        ),
+        centerTitle: true,
+        leading: const BackButton(
+          color: Colors.black,
+        ),
+      ),
       body: FutureBuilder(
         future: _cartApi.getCartById(1),
         builder: (BuildContext context, AsyncSnapshot<Cart?> snapshot) {

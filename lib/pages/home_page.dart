@@ -1,9 +1,10 @@
+import 'dart:collection';
+
 import 'package:api_call/api/category_api.dart';
 import 'package:api_call/api/products_api.dart';
 import 'package:api_call/components/product_card.dart';
 import 'package:api_call/models/product.dart';
 import 'package:api_call/pages/cart_page.dart';
-import 'package:api_call/pages/product_page.dart';
 import 'package:api_call/pages/products_by_category.dart';
 import 'package:api_call/pages/products_page.dart';
 import 'package:flutter/material.dart';
@@ -21,17 +22,39 @@ class _HomePageState extends State<HomePage> {
 
   List<Map<String, dynamic>> headers = [
     {
-      'color': Colors.deepOrangeAccent,
+      'color': Colors.blue,
     },
     {
-      'color': Colors.blue,
+      'color': Colors.deepOrangeAccent,
     },
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const CartPage()));
+              },
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors.black12,
+                width: 300,
+                height: 40,
+                child: const Text(
+                  'Cart Page',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -54,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // hello
             Container(
               margin: _ml(false),

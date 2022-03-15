@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'fredoka regular',
         primarySwatch: Colors.blue,
       ),
-      home: const CartPage(),
+      home: const HomePage(),
     );
   }
 }
