@@ -1,3 +1,4 @@
+import 'package:api_call/pages/products_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.centerLeft,
               child: Text('Hello, name', style: _style),
             ),
+            SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 150,
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => ProductsPage(),
                           ));
                     },
                     child: Container(
@@ -114,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            SizedBox(height: 40),
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -122,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                 style: _style,
               ),
             ),
+            SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
@@ -150,6 +154,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            SizedBox(height: 40),
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -158,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                 style: _style,
               ),
             ),
+            SizedBox(height: 20),
             SizedBox(
               height: 6 * 130,
               child: GridView.count(

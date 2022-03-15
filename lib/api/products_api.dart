@@ -35,4 +35,15 @@ class ProductsApi {
       return products;
     }
   }
+
+  Future<List<Product>?> limitProducts(int num) async {
+    http.Response response =
+        await http.get(Uri.parse(_url + '?limit=' + num.toString()));
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Product> products = body.map((e) => Product.fromJson(e)).toList();
+      return products;
+    }
+  }
 }
