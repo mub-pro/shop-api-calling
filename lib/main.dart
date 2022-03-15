@@ -1,5 +1,6 @@
 import 'package:api_call/pages/cart_page.dart';
 import 'package:api_call/pages/home_page.dart';
+import 'package:api_call/pages/product_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const CartPage(),
+      home: const ProductPage(),
     );
   }
 }
