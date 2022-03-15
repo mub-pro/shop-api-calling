@@ -4,23 +4,23 @@ import 'package:flutter/material.dart';
 
 import 'product_page.dart';
 
-class ProductsPage extends StatelessWidget {
-  ProductsPage({Key? key}) : super(key: key);
+class ProductsByCategory extends StatelessWidget {
+  ProductsByCategory({Key? key, this.category}) : super(key: key);
+  final String? category;
 
   final ProductsApi _productsApi = ProductsApi();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Products', style: TextStyle(color: Colors.black)),
+        title: Text('$category', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         leading: BackButton(color: Colors.black),
       ),
       body: FutureBuilder(
-          future: _productsApi.getProducts(),
+          future: _productsApi.getProductsByCategory(category!),
           builder:
               (BuildContext context, AsyncSnapshot<List<Product>?> snapshot) {
             switch (snapshot.connectionState) {

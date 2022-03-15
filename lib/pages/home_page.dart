@@ -1,3 +1,9 @@
+import 'package:api_call/api/category_api.dart';
+import 'package:api_call/api/products_api.dart';
+import 'package:api_call/models/product.dart';
+import 'package:api_call/pages/cart_page.dart';
+import 'package:api_call/pages/product_page.dart';
+import 'package:api_call/pages/products_by_category.dart';
 import 'package:api_call/pages/products_page.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CategoryApi _categoryApi = CategoryApi();
+  final ProductsApi _productApi = ProductsApi();
+
   List<Map<String, dynamic>> headers = [
     {
       'color': Colors.deepOrangeAccent,
@@ -20,7 +29,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: Drawer(
+          child: ElevatedButton(
+        child: const Text('cart page'),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CartPage()));
+        },
+      )),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -28,7 +44,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) {
             return IconButton(
               onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(Icons.menu, color: Colors.black),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
@@ -37,10 +53,10 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.centerRight,
             child: IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.search, color: Colors.black))),
+                icon: const Icon(Icons.search, color: Colors.black))),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -48,13 +64,13 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.centerLeft,
               child: Text('Hello, name', style: _style),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 150,
-              margin: EdgeInsets.symmetric(vertical: 16),
+              margin: const EdgeInsets.symmetric(vertical: 16),
               child: ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: 2,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
@@ -92,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(16)),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 16),
                               child: Text(
                                 'GET NOW',
@@ -116,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -125,36 +141,57 @@ class _HomePageState extends State<HomePage> {
                 style: _style,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              margin: EdgeInsets.symmetric(vertical: 16),
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: 6,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      margin: _ml(index == 6 - 1),
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.deepOrangeAccent,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Center(
-                          child: Text(
-                        'Electronic',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                  );
-                },
-              ),
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              child: FutureBuilder(
+                  future: _categoryApi.getCategories(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<List?> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                        return const Center(child: Text('Nothing Happen'));
+                      case ConnectionState.waiting:
+                      case ConnectionState.active:
+                        return const Center(child: CircularProgressIndicator());
+                      case ConnectionState.done:
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductsByCategory(
+                                              category: snapshot.data![index],
+                                            )));
+                              },
+                              child: Container(
+                                margin: _ml(index == snapshot.data!.length - 1),
+                                width: 140,
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrangeAccent,
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Center(
+                                    child: Text(
+                                  snapshot.data![index],
+                                  style: const TextStyle(color: Colors.white),
+                                )),
+                              ),
+                            );
+                          },
+                        );
+                    }
+                  }),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Container(
               margin: _ml(false),
               alignment: Alignment.centerLeft,
@@ -163,75 +200,98 @@ class _HomePageState extends State<HomePage> {
                 style: _style,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               height: 6 * 130,
-              child: GridView.count(
-                shrinkWrap: true,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 130.0 / 170.0,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                children: List.generate(
-                    6,
-                    (index) => GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
+              child: FutureBuilder(
+                future: _productApi.limitProducts(5),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Product>?> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return const Center(child: Text('Nothing Happen'));
+                    case ConnectionState.waiting:
+                    case ConnectionState.active:
+                      return const Center(child: CircularProgressIndicator());
+                    case ConnectionState.done:
+                      return GridView.count(
+                        shrinkWrap: true,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 130.0 / 170.0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 16),
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        children: List.generate(5, (index) {
+                          Product product = snapshot.data![index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductPage(product: product)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      top: 30,
+                                      child: Image.network(
+                                        product.image!,
+                                        height: 120,
+                                      )),
+                                  Positioned(
+                                      right: 0,
+                                      child: IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.favorite),
+                                      )),
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 0,
                                     left: 0,
-                                    right: 0,
-                                    top: 30,
-                                    child: Image.asset(
-                                      'assets/images/watch.png',
-                                      height: 120,
-                                    )),
-                                Positioned(
-                                    right: 0,
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.favorite),
-                                    )),
-                                Positioned(
-                                  bottom: 10,
-                                  right: 0,
-                                  left: 0,
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white70,
-                                        borderRadius: BorderRadius.circular(6)),
-                                    width: 120,
-                                    height: 60,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Apple Watch'),
-                                          Text('\$140.0'),
-                                        ],
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white70,
+                                          borderRadius:
+                                              BorderRadius.circular(6)),
+                                      width: 120,
+                                      height: 60,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(product.title!
+                                                .substring(0, 10)),
+                                            Text('\$${product.price!}'),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        )),
+                          );
+                        }),
+                      );
+                  }
+                },
               ),
             ),
           ],
